@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - AgriMind Space AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #020617; /* Dark background */
+            font-family: 'Inter', sans-serif;
+            color: #ffffff;
+        }
+
+        /* 
+         CRITICAL FIX: Canvas must be visible 
+         z-index: canvas -> -1 
+        */
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1; 
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* UI Overlay */
+        .signup-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            /* z-index: form -> 1 */
+            z-index: 1; 
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Centered form as requested */
+            pointer-events: none; /* pass clicks to canvas if needed */
+        }
+
+        /* Glassmorphism Form */
+        .signup-card {
+            pointer-events: auto;
+            width: 100%;
+            max-width: 420px;
+            background: rgba(2, 6, 23, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 204, 255, 0.3); /* Neon blue glow border */
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.2), inset 0 0 15px rgba(0, 204, 255, 0.1);
+            text-align: center;
+        }
+
+        .signup-card h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #00ccff;
+            text-shadow: 0 0 15px rgba(0, 204, 255, 0.5);
+        }
+
+        .signup-card p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .ai-form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .ai-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .ai-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 204, 255, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .ai-input:focus {
+            border-color: #00ccff;
+            box-shadow: 0 0 15px rgba(0, 204, 255, 0.4);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .ai-btn {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 204, 255, 0.15);
+            color: #00ccff;
+            border: 1px solid #00ccff;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 204, 255, 0.2);
+            margin-top: 10px;
+        }
+
+        .ai-btn:hover {
+            background: #00ccff;
+            color: #020617;
+            box-shadow: 0 0 25px rgba(0, 204, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .ai-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .ai-link a {
+            color: #00ccff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: text-shadow 0.3s;
+        }
+
+        .ai-link a:hover {
+            text-shadow: 0 0 10px rgba(0, 204, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- UI Overlay for Sign Up Application -->
+    <div class="signup-overlay">
+        <div class="signup-card">
+            <h2>Sign Up</h2>
+            <p>Join the global AI agricultural network.</p>
+            
+            <form id="signup-form">
+                <div class="ai-form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="s-name" class="ai-input" placeholder="Enter your name" required>
+                </div>
+                <div class="ai-form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="s-email" class="ai-input" placeholder="you@domain.com" required>
+                </div>
+                <div class="ai-form-group">
+                    <label>Password</label>
+                    <input type="password" id="s-pass" class="ai-input" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="ai-btn">Create Account</button>
+            </form>
+            
+            <div class="ai-link">
+                Already have an account? <a href="login.html">Log In</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js Globe Logic strictly following requirements -->
+    <script>
+        // 1. Create a full-screen WebGL scene
+        const scene = new THREE.Scene();
+        
+        // 2. Camera Setup
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 6); // Positioned to see the globe
+
+        // 3. Renderer Setup
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        
+        // Append canvas to body, strictly z-index -1 defined in CSS
+        document.body.appendChild(renderer.domElement);
+
+        // 4. Add a 3D sphere (geometry)
+        const geometry = new THREE.SphereGeometry(2, 64, 64);
+        
+        // 5. Apply Earth texture (real map image from provided path strategy)
+        const textureLoader = new THREE.TextureLoader();
+        // Utilizing reliable MRDOOB raw github path as standard for this resolution
+        const earthTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg');
+        
+        const material = new THREE.MeshPhongMaterial({
+            map: earthTexture,
+            color: 0xdddddd,
+            emissive: new THREE.Color(0x001133), // Subtle space blue
+            emissiveIntensity: 0.3,
+            shininess: 25
+        });
+        
+        const earth = new THREE.Mesh(geometry, material);
+        // Tilt Earth axis slightly
+        earth.rotation.z = 23.5 * Math.PI / 180;
+        scene.add(earth);
+
+        // 6. Add slight glow effect
+        const atmosphereGeom = new THREE.SphereGeometry(2.1, 64, 64);
+        const atmosphereMat = new THREE.MeshBasicMaterial({
+            color: 0x00ccff, // Neon blue glow
+            transparent: true,
+            opacity: 0.15,
+            blending: THREE.AdditiveBlending,
+            side: THREE.BackSide
+        });
+        const atmosphere = new THREE.Mesh(atmosphereGeom, atmosphereMat);
+        scene.add(atmosphere);
+
+        // 7. Add lighting (Ambient + Point Light)
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2); 
+        scene.add(ambientLight);
+
+        // Point light (Sun)
+        const pointLight = new THREE.PointLight(0xffffff, 1.0);
+        pointLight.position.set(5, 3, 5); 
+        scene.add(pointLight);
+
+        // Blue neon fill light
+        const backLight = new THREE.PointLight(0x00ccff, 1.0);
+        backLight.position.set(-5, -3, -5);
+        scene.add(backLight);
+
+        // Add stars to enhance the "space UI" feel
+        const starGeo = new THREE.BufferGeometry();
+        const starCount = 2000;
+        const starPos = new Float32Array(starCount * 3);
+        for(let i=0; i < starCount * 3; i++) {
+            starPos[i] = (Math.random() - 0.5) * 200;
+        }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+        const starMat = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 0.1,
+            transparent: true,
+            opacity: 0.7
+        });
+        const stars = new THREE.Points(starGeo, starMat);
+        scene.add(stars);
+
+        // 8. Add rotation animation (infinite loop uses requestAnimationFrame)
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Continuous slow, smooth rotation
+            earth.rotation.y += 0.0015;
+            atmosphere.rotation.y += 0.0018;
+            
+            // Slow star drift
+            stars.rotation.y -= 0.0002;
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Start animation automatically on page load
+        animate();
+
+        // 9. Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Backend Integration
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById('s-name').value,
+                email: document.getElementById('s-email').value,
+                password: document.getElementById('s-pass').value
+            };
+            try {
+                const res = await fetch(`http://${window.location.hostname}:8000/register`, {
+                    method: "POST", headers: {"Content-Type":"application/json"},
+                    body: JSON.stringify(payload)
+                });
+                if(res.ok) {
+                    window.location.href = "login.html";
+                } else {
+                    const err = await res.json();
+                    alert(err.detail);
+                }
+            } catch(error) {
+                console.error(error);
+                alert("Server issue. Check if backend is running.");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+:root {
+    /* Color Palette */
+    --neon-green: #00ff9f;
+    --neon-green-shadow: rgba(0, 255, 159, 0.4);
+    --dark-bg: #020617;
+    --glass-bg: rgba(2, 6, 23, 0.65);
+    --glass-border: rgba(0, 255, 159, 0.2);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--dark-bg);
+    color: var(--text-main);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* =========================================
+   Live Video Background
+   ========================================= */
+#bg-video {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -2; /* Behind everything */
+    transform: translateX(-50%) translateY(-50%);
+    object-fit: cover;
+    filter: brightness(0.9);
+}
+
+.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, rgba(2, 6, 23, 0.5) 0%, rgba(2, 6, 23, 0.85) 100%);
+    z-index: -1;
+}
+
+/* =========================================
+   Canvas Leaves Animation
+   ========================================= */
+#leaf-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none; /* Let clicks pass through */
+}
+
+/* =========================================
+   Glassmorphism Main Container
+   ========================================= */
+.app-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 850px;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    /* Glass Effect */
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 255, 159, 0.05);
+    overflow: hidden;
+    margin: 0 20px;
+    animation: containerFadeIn 1s ease-out forwards;
+}
+
+@keyframes containerFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header */
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background: rgba(2, 6, 23, 0.8);
+    border-bottom: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--neon-green);
+    text-shadow: 0 0 15px var(--neon-green-shadow);
+    letter-spacing: 0.5px;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pulse {
+    width: 8px;
+    height: 8px;
+    background-color: var(--neon-green);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--neon-green);
+    animation: pulseAnimation 2s infinite;
+}
+
+@keyframes pulseAnimation {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 159, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(0, 255, 159, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 159, 0); }
+}
+
+/* =========================================
+   Chat Area & Messages
+   ========================================= */
+.chat-messages {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+.chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 159, 0.3);
+    border-radius: 10px;
+}
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 159, 0.6);
+}
+
+.message {
+    display: flex;
+    gap: 16px;
+    max-width: 85%;
+    animation: messageSlideIn 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    opacity: 0;
+    transform: translateY(15px);
+}
+
+@keyframes messageSlideIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.ai-message {
+    align-self: flex-start;
+}
+
+.user-message {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.message:hover .avatar {
+    transform: scale(1.1);
+}
+
+.ai-message .avatar {
+    background: rgba(0, 255, 159, 0.1);
+    color: var(--neon-green);
+    border: 1px solid var(--neon-green);
+    box-shadow: 0 0 15px rgba(0, 255, 159, 0.2);
+}
+
+.user-message .avatar {
+    background: linear-gradient(135deg, var(--neon-green), #00b37e);
+    color: var(--dark-bg);
+}
+
+.content {
+    padding: 16px 22px;
+    border-radius: 20px;
+    font-size: 1rem;
+    line-height: 1.6;
+    letter-spacing: 0.3px;
+    position: relative;
+}
+
+/* AI Message: Glass Card */
+.ai-message .content {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top-left-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* User Message: Green Gradient */
+.user-message .content {
+    background: linear-gradient(135deg, var(--neon-green), #02cc83);
+    color: var(--dark-bg);
+    border-top-right-radius: 4px;
+    font-weight: 500;
+    box-shadow: 0 8px 20px rgba(0, 255, 159, 0.25);
+}
+
+/* =========================================
+   Input Area Fixed at Bottom
+   ========================================= */
+.chat-input-container {
+    padding: 24px 30px;
+    background: rgba(2, 6, 23, 0.85);
+    border-top: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(0, 255, 159, 0.3);
+    border-radius: 50px; /* Pill shape */
+    padding: 8px 10px 8px 24px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.input-wrapper:focus-within {
+    border-color: var(--neon-green);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 255, 159, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+#chat-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    padding: 10px 10px 10px 0;
+}
+
+#chat-input::placeholder {
+    color: var(--text-muted);
+}
+
+#send-btn {
+    background: var(--neon-green);
+    color: var(--dark-bg);
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 0 15px var(--neon-green-shadow);
+    margin-left: 10px;
+}
+
+#send-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px var(--neon-green);
+}
+
+#send-btn:active {
+    transform: scale(0.95);
+}
+
+/* =========================================
+   Typing Indicator
+   ========================================= */
+.typing-indicator {
+    display: flex;
+    gap: 5px;
+    padding: 8px 12px;
+    align-items: center;
+    height: 24px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background: var(--neon-green);
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite ease-in-out both;
+}
+
+.dot:nth-child(1) { animation-delay: -0.32s; }
+.dot:nth-child(2) { animation-delay: -0.16s; }
+.dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes typingBounce {
+    0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; box-shadow: 0 0 8px var(--neon-green); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .app-container {
+        height: 95vh;
+        margin: 0 10px;
+        border-radius: 16px;
+    }
+    
+    .chat-messages {
+        padding: 20px;
+    }
+    
+    .message {
+        max-width: 95%;
+    }
+}

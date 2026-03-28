@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .glassmorphism {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
+  
+  .glass-card {
+    @apply bg-agrimind-900/40 backdrop-blur-md border border-agrimind-500/20 shadow-[0_8px_32px_0_rgba(11,74,44,0.37)] rounded-2xl;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  /* Very dark green gradient background fallback */
+  background: linear-gradient(135deg, #021a0f 0%, #000000 100%);
+  background-attachment: fixed;
+}

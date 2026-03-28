@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile - AgriMind AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="app-body">
+    <nav class="top-nav">
+        <div class="logo">🌱 AgriMind AI</div>
+        <div class="nav-links">
+            <a href="index.html">Chat</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        </div>
+    </nav>
+    <div class="dashboard-container" style="max-width:600px; margin: 40px auto; background:white; padding:40px; border-radius:16px;">
+        <div style="text-align:center; margin-bottom:30px;">
+            <div style="font-size:4rem;">🧑‍🌾</div>
+            <h2><span id="p-name">Name</span></h2>
+            <p style="color:#6b7280;" id="p-email">email@example.com</p>
+        </div>
+        
+        <form id="profileForm" class="auth-form">
+            <div class="input-group" style="margin-top:15px;">
+                <label>Location (State/City)</label>
+                <input type="text" id="p-loc" required>
+            </div>
+            <div class="input-group" style="margin-top:15px;">
+                <label>Primary Crop</label>
+                <input type="text" id="p-crop" required>
+            </div>
+            <div class="input-group" style="margin-top:15px;">
+                <label>Farm Size</label>
+                <input type="text" id="p-size" placeholder="e.g. 5 Acres">
+            </div>
+            
+            <button type="submit" class="btn-primary" style="margin-top:20px; width:100%;">Save Changes</button>
+        </form>
+    </div>
+    <script>
+        if(!localStorage.getItem("token")) window.location.href = "login.html";
+        
+        const nameEl = document.getElementById("p-name");
+        const emailEl = document.getElementById("p-email");
+        const locEl = document.getElementById("p-loc");
+        const cropEl = document.getElementById("p-crop");
+        const sizeEl = document.getElementById("p-size");
+
+        // Load data from session/localStorage
+        nameEl.innerText = localStorage.getItem("name") || "Farmer";
+        emailEl.innerText = localStorage.getItem("email") || "";
+        locEl.value = localStorage.getItem("location") || "";
+        cropEl.value = localStorage.getItem("crop") || "";
+        sizeEl.value = localStorage.getItem("farm_size") || "";
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.clear(); window.location.href = "login.html";
+        });
+
+        document.getElementById("profileForm").addEventListener("submit", async(e) => {
+            e.preventDefault();
+            const location = locEl.value;
+            const crop = cropEl.value;
+            const size = sizeEl.value;
+            
+            const payload = {
+                token: localStorage.getItem("token"),
+                location: location,
+                crop: crop,
+                farm_size: size
+            };
+            
+            try {
+                // We reuse /setup endpoint for profile updates since it expects {token, location, crop, farm_size}
+                const res = await fetch(`http://${window.location.hostname}:8000/setup`, {
+                    method: "POST", headers: {"Content-Type":"application/json"},
+                    body: JSON.stringify(payload)
+                });
+                if(res.ok) {
+                    localStorage.setItem("location", location);
+                    localStorage.setItem("crop", crop);
+                    localStorage.setItem("farm_size", size);
+                    alert("Profile updated successfully!");
+                } else {
+                    const err = await res.json();
+                    alert(err.detail || "Error saving profile");
+                }
+            } catch(err) {
+                console.error(err);
+                alert("Server issue.");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - AgriMind AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Overrides specific to this page to exactly match the photo layout */
+        .login-header h2 { font-size: 2.8rem; margin-bottom: 2rem; color: #1e293b; letter-spacing: -0.5px; }
+        .input-group-modern label { font-size: 0.8rem; color: #64748b; font-weight: 500; }
+        .input-group-modern input { padding: 1rem 1.2rem; border-color: #e2e8f0; border-radius: 8px; background: #ffffff; }
+        .btn-modern-green { background: #15803d; border-radius: 8px; padding: 1rem; margin-top: 10px; }
+        .btn-modern-green:hover { background: #166534; box-shadow: 0 4px 15px rgba(21, 128, 61, 0.4); }
+    </style>
+</head>
+<body class="split-page-body">
+    <div class="split-layout">
+        <!-- LEFT PANEL (40%) -->
+        <div class="split-left" style="align-items: flex-start; padding-top: 8vh; padding-left: 8vw; padding-right: 6vw;">
+            <div class="login-card-modern fade-in-up" style="max-width: 450px; width: 100%;">
+                
+                <!-- App Badges -->
+                <div style="display: flex; gap: 15px; margin-bottom: 40px;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" height="32">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" height="32">
+                </div>
+
+                <div class="login-header" style="margin-bottom: 2rem;">
+                    <p style="font-size: 0.95rem; color:#64748b; margin-bottom: 0px; font-weight: 500;">Welcome</p>
+                    <h2 style="font-family: 'Poppins', sans-serif;">Sign Up</h2>
+                </div>
+                
+                <form id="registerForm" class="modern-form">
+                    <div class="input-group-modern" style="margin-bottom: 1.5rem;">
+                        <label for="r-name">Your Name</label>
+                        <input type="text" id="r-name" placeholder="John Doe" required>
+                    </div>
+                    <div class="input-group-modern" style="margin-bottom: 1.5rem;">
+                        <label for="r-email">Your Email</label>
+                        <input type="email" id="r-email" placeholder="example@email.com" required>
+                    </div>
+                    <div class="input-group-modern" style="margin-bottom: 2.5rem; position: relative;">
+                        <label for="r-pass">Password</label>
+                        <input type="password" id="r-pass" placeholder="••••••••" required>
+                        <!-- Fake eye icon for aesthetics matching photo -->
+                        <span style="position: absolute; right: 15px; top: 40px; color: #cbd5e1; cursor: pointer;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </span>
+                    </div>
+                    
+                    <button type="submit" class="btn-modern-green" style="width:100%;">Sign Up</button>
+                    
+                    <p class="signup-prompt" style="margin-top: 2rem; font-size: 0.85rem; color: #94a3b8;">
+                        Already have an account? <a href="login.html" style="color: #15803d; font-weight: 700;">Log In</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL (60%) -->
+        <div class="split-right" style="background-color: #115e2e; position: relative;">
+            
+            <!-- Blobs matching the photo -->
+            <div style="position: absolute; top: 0; left: 0; width: 40%; height: 35%; background: #22c55e; opacity: 0.15; border-bottom-right-radius: 100%; border-top-right-radius: 30%;"></div>
+            <div style="position: absolute; bottom: -10%; right: -5%; width: 50%; height: 40%; background: #22c55e; opacity: 0.15; border-top-left-radius: 70%; border-top-right-radius: 20%;"></div>
+            
+            <div class="right-content fade-in-zoom" style="background: transparent; border: none; box-shadow: none; width: 100%; max-width: 600px; padding: 2rem;">
+                
+                <!-- Top Right Branding -->
+                <div style="position: absolute; top: -60px; right: 20px; text-align: right; color: #ffffff;">
+                    <div style="font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1.3rem; letter-spacing: 0.5px;">AgriMindAI</div>
+                    <div style="font-size: 0.75rem; font-weight: 400; opacity: 0.8;">[ Assistant ]</div>
+                </div>
+                
+                <!-- Premium Farmers Illustration -->
+                <div style="display: flex; justify-content: center; margin-bottom: 2rem; margin-top: 2rem;">
+                    <img src="https://cdni.iconscout.com/illustration/premium/thumb/farmers-working-in-field-5342460-4468817.png" alt="Agriculture AI" style="width: 100%; max-width: 480px; height: auto;">
+                </div>
+                
+                <div class="right-text-content" style="text-align: center;">
+                    <h3 style="font-size: 1.8rem; font-weight: 600; color: #ffffff; text-shadow: none; margin-bottom: 15px;">Get the best premium insights</h3>
+                    <p style="font-size: 0.95rem; color: rgba(255,255,255,0.85); font-weight: 400; max-width: 420px; margin: 0 auto; line-height: 1.6;">
+                        You can get the best premium agricultural advice with the latest AI technology only in HERE ->
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Logic -->
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById("r-name").value,
+                email: document.getElementById("r-email").value,
+                password: document.getElementById("r-pass").value
+            };
+            try {
+                const res = await fetch(`http://${window.location.hostname}:8000/register`, {
+                    method: "POST", headers: {"Content-Type":"application/json"},
+                    body: JSON.stringify(payload)
+                });
+                if(res.ok) {
+                    window.location.href = "login.html";
+                } else {
+                    const err = await res.json();
+                    alert(err.detail);
+                }
+            } catch(e) {
+                console.error(e);
+                alert("Server issue. Check if backend is running.");
+            }
+        });
+    </script>
+</body>
+</html>
